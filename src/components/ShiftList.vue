@@ -1,5 +1,8 @@
 <template>
   <v-container>
+      <v-layout>
+        <v-icon medium @click="home">home</v-icon>
+      </v-layout>
       <v-layout align-center justify-center>
           <v-flex class="display-3">
             Shift List / This Weeks Schedule
@@ -105,6 +108,11 @@ export default {
           router.push({
               name: 'AddShift'
           })
+      },
+      home() {
+        router.push({
+          name: 'Home'
+        })
       }
   }
 }

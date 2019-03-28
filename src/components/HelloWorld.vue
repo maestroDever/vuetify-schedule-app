@@ -1,9 +1,10 @@
 <template>
   <div id="app">
   <v-app id="inspire">
+    <v-icon medium @click="home">home</v-icon>
     <div>
       <v-toolbar flat color="white">
-        <v-toolbar-title>My CRUD</v-toolbar-title>
+        <v-toolbar-title>Single Data Table CRUD</v-toolbar-title>
         <v-divider
           class="mx-2"
           inset
@@ -240,6 +241,12 @@ export default {
         })
       }
       this.close()
+    },
+
+    home() {
+      router.push({
+        name: 'Home'
+      })
     }
   }
 }
