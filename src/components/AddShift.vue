@@ -69,8 +69,8 @@
                     ></v-text-field>
                 </v-flex>
                 <v-flex>
-                    <v-btn @click="submitForm">Submit</v-btn>
-                    <v-btn @click="cancel">Cancel</v-btn>
+                    <v-btn @click="submitForm" color="green">Submit</v-btn>
+                    <v-btn @click="cancel" color="red">Cancel</v-btn>
                 </v-flex>
             </v-layout>
         </v-form>
