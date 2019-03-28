@@ -1,145 +1,220 @@
 <template>
-  <v-container>
-    <v-layout
-      text-xs-center
-      wrap
-    >
-      <v-flex xs12>
-        <v-img
-          :src="require('../assets/logo.svg')"
-          class="my-3"
-          contain
-          height="200"
-        ></v-img>
-      </v-flex>
-
-      <v-flex mb-4>
-        <h1 class="display-2 font-weight-bold mb-3">
-          Welcome to Vuetify
-        </h1>
-        <p class="subheading font-weight-regular">
-          For help and collaboration with other Vuetify developers,
-          <br>please join our online
-          <a href="https://community.vuetifyjs.com" target="_blank">Discord Community</a>
-        </p>
-      </v-flex>
-
-      <v-flex
-        mb-5
-        xs12
+  <div id="app">
+  <v-app id="inspire">
+    <div>
+      <v-toolbar flat color="white">
+        <v-toolbar-title>My CRUD</v-toolbar-title>
+        <v-divider
+          class="mx-2"
+          inset
+          vertical
+        ></v-divider>
+        <v-spacer></v-spacer>
+        <v-dialog v-model="dialog" max-width="500px">
+          <template v-slot:activator="{ on }">
+            <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="headline">{{ modalTitle }}</span>
+            </v-card-title>
+  
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field v-model="selectedItem.time" label="Time"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md6>
+                    <v-text-field v-model="selectedItem.shiftType" label="Shift Type"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="selectedItem.monday" label="Monday"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="selectedItem.tuesday" label="Thuesday"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="selectedItem.wednesday" label="Wednesday"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="selectedItem.thursday" label="Thursday"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="selectedItem.friday" label="Friday"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="selectedItem.saturday" label="Saturday"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="selectedItem.sunday" label="Sunday"></v-text-field>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+  
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+              <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
+      <v-data-table
+        :headers="headers"
+        :items="schedules"
+        class="elevation-1"
       >
-        <h2 class="headline font-weight-bold mb-3">What's next?</h2>
-
-        <v-layout justify-center>
-          <a
-            v-for="(next, i) in whatsNext"
-            :key="i"
-            :href="next.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ next.text }}
-          </a>
-        </v-layout>
-      </v-flex>
-
-      <v-flex
-        xs12
-        mb-5
-      >
-        <h2 class="headline font-weight-bold mb-3">Important Links</h2>
-
-        <v-layout justify-center>
-          <a
-            v-for="(link, i) in importantLinks"
-            :key="i"
-            :href="link.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ link.text }}
-          </a>
-        </v-layout>
-      </v-flex>
-
-      <v-flex
-        xs12
-        mb-5
-      >
-        <h2 class="headline font-weight-bold mb-3">Ecosystem</h2>
-
-        <v-layout justify-center>
-          <a
-            v-for="(eco, i) in ecosystem"
-            :key="i"
-            :href="eco.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ eco.text }}
-          </a>
-        </v-layout>
-      </v-flex>
-    </v-layout>
-  </v-container>
+        <template v-slot:items="props">
+          <td>{{ props.item.time }}</td>
+          <td class="text-xs-right">{{ props.item.shiftType }}</td>
+          <td class="text-xs-right">{{ props.item.monday }}</td>
+          <td class="text-xs-right">{{ props.item.tuesday }}</td>
+          <td class="text-xs-right">{{ props.item.wednesday }}</td>
+          <td class="text-xs-right">{{ props.item.thursday }}</td>
+          <td class="text-xs-right">{{ props.item.friday }}</td>
+          <td class="text-xs-right">{{ props.item.saturday }}</td>
+          <td class="text-xs-right">{{ props.item.sunday }}</td>
+          <td class="justify-center layout px-0">
+            <v-icon
+              small
+              class="mr-2"
+              @click="editItem(props.item)"
+            >
+              edit
+            </v-icon>
+            <v-icon
+              small
+              @click="deleteItem(props.item)"
+            >
+              delete
+            </v-icon>
+          </td>
+        </template>
+        <template v-slot:no-data>
+          <v-btn color="primary" @click="initialize">Reset</v-btn>
+        </template>
+      </v-data-table>
+    </div>
+  </v-app>
+</div>
 </template>
 
 <script>
-  export default {
-    data: () => ({
-      ecosystem: [
-        {
-          text: 'vuetify-loader',
-          href: 'https://github.com/vuetifyjs/vuetify-loader'
-        },
-        {
-          text: 'github',
-          href: 'https://github.com/vuetifyjs/vuetify'
-        },
-        {
-          text: 'awesome-vuetify',
-          href: 'https://github.com/vuetifyjs/awesome-vuetify'
-        }
-      ],
-      importantLinks: [
-        {
-          text: 'Documentation',
-          href: 'https://vuetifyjs.com'
-        },
-        {
-          text: 'Chat',
-          href: 'https://community.vuetifyjs.com'
-        },
-        {
-          text: 'Made with Vuetify',
-          href: 'https://madewithvuetifyjs.com'
-        },
-        {
-          text: 'Twitter',
-          href: 'https://twitter.com/vuetifyjs'
-        },
-        {
-          text: 'Articles',
-          href: 'https://medium.com/vuetify'
-        }
-      ],
-      whatsNext: [
-        {
-          text: 'Explore components',
-          href: 'https://vuetifyjs.com/components/api-explorer'
-        },
-        {
-          text: 'Select a layout',
-          href: 'https://vuetifyjs.com/layout/pre-defined'
-        },
-        {
-          text: 'Frequently Asked Questions',
-          href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions'
-        }
+import { db, scheduleCollection } from '../firebaseConfig'
+import router from '../router'
 
-      ]
+export default {
+  name: 'HelloWorld',
+  
+  data: () => ({
+    dialog: false,
+    headers: [
+      { text: 'Shift', align: 'left', sortable: false, value: 'time' },
+      { text: 'Shift Type', value: 'shiftType' },
+      { text: 'Monday', sortable: false, value: 'monday' },
+      { text: 'Tuesday', sortable: false, value: 'tuesday' },
+      { text: 'Wednesday', sortable: false, value: 'wednesday' },
+      { text: 'Thursday', sortable: false, value: 'thursday' },
+      { text: 'Friday', sortable: false, value: 'friday' },
+      { text: 'Saturday', sortable: false, value: 'saturday' },
+      { text: 'Sunday', sortable: false, value: 'sunday' },
+      { text: 'Actions', value: 'id', sortable: false }
+    ],
+    schedules: [],
+    selectedIndex: -1,
+    selectedItem: {
+      id: -1,
+      time: '',
+      shiftType: '',
+      monday: '',
+      tuesday: '',
+      wednesday: '',
+      thursday: '',
+      friday: '',
+      saturday: '',
+      sunday: '',
+    },
+    defaultItem: {
+      id: 0,
+      time: '',
+      shiftType: '',
+      monday: '',
+      tuesday: '',
+      wednesday: '',
+      thursday: '',
+      friday: '',
+      saturday: '',
+      sunday: '',
+    }
+  }),
+
+  computed: {
+    modalTitle () {
+      return this.selectedIndex === -1 ? 'New Shift' : 'Edit Shift'
+    }
+  },
+
+  watch: {
+    dialog (val) {
+      val || this.close()
+    }
+  },
+
+  created () {
+    scheduleCollection.get().then(snapshot => {
+      snapshot.forEach(doc => {
+        this.schedules.push({
+          id: doc.id,
+          time: doc.data().time,
+          shiftType: doc.data().shiftType,
+          monday: doc.data().monday,
+          tuesday: doc.data().tuesday,
+          wednesday: doc.data().wednesday,
+          thursday: doc.data().thursday,
+          friday: doc.data().friday,
+          saturday: doc.data().saturday,
+          sunday: doc.data().sunday
+        })
+      })
     })
+  },
+
+  methods: {
+    initialize () {
+      
+    },
+
+    editItem (item) {
+      this.selectedIndex = this.schedules.indexOf(item)
+      this.selectedItem = Object.assign({}, item)
+      this.dialog = true
+    },
+
+    deleteItem (item) {
+      const index = this.schedules.indexOf(item)
+      confirm('Are you sure you want to delete this item?') && this.schedules.splice(index, 1)
+    },
+
+    close () {
+      this.dialog = false
+      setTimeout(() => {
+        this.selectedItem = Object.assign({}, this.defaultItem)
+        this.selectedIndex = -1
+      }, 300)
+    },
+
+    save () {
+      if (this.selectedIndex > -1) {
+        Object.assign(this.schedules[this.selectedIndex], this.selectedItem)
+      } else {
+        this.schedules.push(this.selectedItem)
+      }
+      this.close()
+    }
   }
+}
 </script>
 
 <style>

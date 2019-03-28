@@ -5,13 +5,20 @@ import ShiftList from './components/ShiftList'
 import AddShift from './components/AddShift'
 import EditShifts from './components/EditShifts'
 import ShowShifts from './components/ShowShifts'
+import HelloWorld from './components/HelloWorld'
 
 export default new VueRouter({
-  routes: [{
+  routes: [
+  {
     path: '/',
     name: 'Home',
     component: Home
 
+  },
+  {
+    path: '/awesome',
+    name: 'awesome',
+    component: HelloWorld
   },
   {
     path: '/shiftlist',
