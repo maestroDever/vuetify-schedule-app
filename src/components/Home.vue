@@ -5,6 +5,9 @@
     <router-link :to="{ name: 'ShiftList' }">
       <p>Show Schedule List</p>
     </router-link>
+    <router-link :to="{ name: 'awesome' }">
+      <p>Single Data Table CRUD</p>
+    </router-link>
   </div>
 </template>
 

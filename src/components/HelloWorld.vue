@@ -194,7 +194,18 @@ export default {
 
     deleteItem (item) {
       const index = this.schedules.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.schedules.splice(index, 1)
+      if(confirm('Are you sure you want to delete this item?')) {
+        this.schedules.splice(index, 1)
+        scheduleCollection.doc(item.id)
+          .delete()
+          .then(() =>{
+            
+          })
+          .catch(error => {
+            alert("Error occured while trying to delete the schedule.")
+            console.log(error)
+          })
+      }
     },
 
     close () {
@@ -208,8 +219,25 @@ export default {
     save () {
       if (this.selectedIndex > -1) {
         Object.assign(this.schedules[this.selectedIndex], this.selectedItem)
+        scheduleCollection.doc(this.selectedItem.id)
+          .set(this.selectedItem)
+          .then(docRef => {
+            this.close()
+          })
+          .catch(error => {
+              alert("Error occured while updating the schedule")
+              console.log(error)
+          })
       } else {
+        const time = Date.now()
+        this.selectedItem.id = String(time)
         this.schedules.push(this.selectedItem)
+        scheduleCollection.add(this.selectedItem).then(docRef => {
+          this.close
+        }).catch(error => {
+          alert("Error occured while adding into schedule")
+          console.log(error)
+        })
       }
       this.close()
     }
