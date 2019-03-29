@@ -233,7 +233,9 @@ export default {
         const time = Date.now()
         this.selectedItem.id = String(time)
         this.schedules.push(this.selectedItem)
-        scheduleCollection.add(this.selectedItem).then(docRef => {
+        scheduleCollection
+          .doc(this.selectedItem.id)
+          .set(this.selectedItem).then(docRef => {
           this.close
         }).catch(error => {
           alert("Error occured while adding into schedule")
